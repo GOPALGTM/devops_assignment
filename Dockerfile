@@ -1,10 +1,10 @@
-# Pull base image
-FROM python:3.10.6
-RUN pip install --upgrade pip
-# Set work directory
-WORKDIR /
+FROM php:7.4-apache
 
-# Install dependencies
-ADD . .
- 
-CMD python3 server.py 
+RUN apt-get update && apt-get install -y python3
+
+COPY index.php /var/www/html/
+COPY server.py /var/www/html/
+
+EXPOSE 80
+
+CMD service apache2 start && python3 -u server.py || true && apache2ctl -D FOREGROUND
